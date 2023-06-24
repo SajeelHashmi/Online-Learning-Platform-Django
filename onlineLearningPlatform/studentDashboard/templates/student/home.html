@@ -1,0 +1,58 @@
+<!--  show welcome student name
+create a table for enrolled course with heading your courses 
+each course title will be displayed then its forum link then its assigment submitted/ total
+course title will have  link to another page showing information regarding that course -->
+
+
+{% extends 'student/base.html' %}
+{% block title %}
+  Student Dashboard
+{% endblock %}
+{% block body %}
+<div class="container mt-4 ">
+  
+  <h1 class="text-center">
+    Welcome {{student.user.username}}
+  </h1>
+  {% if coursesInfo %}
+  <h2 class="">
+    Your courses
+  </h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Assignments</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in coursesInfo  %}
+        
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{c.course.title}}</td>
+        <td>{{c.submittedAssignments}}/{{c.totalAssignments}}</td>
+        <td>
+          <a href="course/{{c.course.id}}">
+            <button class="btn-primary btn ">View</button>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+  
+    </tbody>
+  </table>
+    
+  {% else %}
+    <h2>you have not been registered any courses 
+      add link to offered courses
+    </h2>
+  {% endif %}
+
+
+</div>
+
+
+{% endblock  %}

@@ -1,0 +1,113 @@
+<!-- will contain information regarding a certain course that student is enrolled in -->
+
+{% extends 'student/base.html' %}
+{% block title %}
+  Student Dashboard
+{% endblock %}
+{% block body %}
+  <div class="container py-5">
+    <h1 class="py-3">
+      {{course.title |title}}
+    </h1>
+    <h2 class="py-3">
+      Instructor: {{course.instructor.user.first_name | lower | capfirst}} {{course.instructor.user.last_name | lower | capfirst}}
+    </h2>
+    <h4 class="py-3">
+      <a href="/forum/{{course.id}}" class="badge rounded-pill text-bg-primary text-decoration-none p-3"href="">Forum</a>
+    </h4>
+{% if assignments %}
+  
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Title</th>
+          <th>Assignment</th>
+          <th scope="col">Submission</th>
+
+          <th scope="col">Assesment</th>
+          <th scope="col">Due Date</th>
+          <!-- Submit/delete -->
+          <th scope="col"></th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in assignments  %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{a.a.title}}</td>
+          <td> <a href="{{a.a.file.url}}"  class="badge rounded-pill text-bg-primary text-decoration-none p-3" download>Assignment </td>
+          <td>
+            {% if a.submission %}
+              
+            <a href="{{a.submission.submission_file.url}}"  class="badge rounded-pill text-bg-primary text-decoration-none p-3" download>
+              Submission </a>
+            {% else %}
+              Not Submitted
+            {% endif %}
+            </td>
+
+          <td>
+            {% if a.submission %}
+              
+            {{a.submission.assesment}}
+            {% else %}
+            Not Submitted
+
+            {% endif %}
+          
+          </td>
+          <td>{{a.a.due_date}}</td>
+
+          <td>
+              {% if a.submission %}
+              <button class="btn-primary btn ">
+                Delete 
+              </button>
+                
+              {% else %}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{a.a.id}}">
+ Submit
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop{{a.a.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Submit</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <form enctype="multipart/form-data" action="s" method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="modal-body">
+        Only .pdf, .docx, , .xlsx and .ppt  files are accepted
+        <input type="hidden" required name="courseId" value="{{course.id}}">
+        <input type="hidden" required name="assignmentId" value = "{{a.a.id}}">
+          <input type="file" required accept=".pdf, .docx, .xlsx .ppt" name="submission" id="">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form> 
+    </div>
+  </div>
+</div>          
+              {% endif %}
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+    
+      </tbody>
+
+  </table>
+  {% else %}
+  THIS COURSE HAS NO ASSIGNMENTS AS OF NOW
+{% endif %}
+  </div>
+{% endblock  %}

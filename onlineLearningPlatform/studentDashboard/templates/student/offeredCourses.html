@@ -1,0 +1,71 @@
+{% extends 'student/base.html' %}
+{% block title %}
+  Student Dashboard
+{% endblock %}
+{% block body %}
+<div class="container mt-5">
+  <form method="GET" action="{% url 'offeredcourses' %}" class="mb-4">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input type="text" name="search" class="form-control" placeholder="Search by keyword, instructor name, subject, or course name">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="sort_by" id="price_low_high" value="price_low_high">
+          <label class="form-check-label" for="price_low_high">Price Low to High</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="sort_by" id="price_high_low" value="price_high_low">
+          <label class="form-check-label" for="price_high_low">Price High to Low</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="sort_by" id="start_date_low_high" value="start_date_low_high">
+          <label class="form-check-label" for="start_date_low_high">Start Date Low to High</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="sort_by" id="start_date_high_low" value="start_date_high_low">
+          <label class="form-check-label" for="start_date_high_low">Start Date High to Low</label>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Tags</th>
+        <th scope="col">Price</th>
+        <th scope="col">Instructor</th>
+        <th scope="col">Starts At</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in courses %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ c.title }}</td>
+        <td>
+          {% for tag in c.tags.all %}
+          <a href="{% url 'offeredcourses' %}?tag={{ tag.name }}" class="btn btn-primary">{{ tag }}</a>
+          {% endfor %}
+        </td>
+        <td>Rs {{ c.price }}</td>
+        <td>{{ c.instructor }}</td>
+        <td>{{ c.start_date }}</td>
+        <td>
+          <a href="{% url 'course' c.id %}" target="_blank">
+            <button class="btn-primary btn">View</button>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

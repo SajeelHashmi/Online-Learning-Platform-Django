@@ -1,0 +1,44 @@
+{% extends 'instructor/base.html' %}
+{% block title %}
+  instructor Dashboard
+{% endblock %}
+{% block body %}
+<div class="container">
+  <h1 class="text-center">
+    Welcome {{instructor.user.username}}
+  </h1>
+  {% if courses %}
+  <h2 class="">
+    Your courses
+  </h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in courses  %}
+        
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{c.title}}</td>
+        <td>
+          <a href="course/{{c.id}}">
+            <button class="btn-primary btn ">View</button>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+  
+    </tbody>
+  </table>
+  {% else %}
+  <h2>you have not been registered any courses 
+    add link to offered courses
+  </h2>
+{% endif %}
+</div>
+{% endblock  %}

@@ -1,0 +1,94 @@
+{% extends 'forum/base.html' %}
+{% block title %}
+  forum 
+{% endblock %}
+{% block body %}
+<div class="container ">
+    <h1 class=" my-5">
+        {{forum.course.title | lower |title}}
+    </h1>
+    <form action="{% url 'newPost' %}" method="post">
+        {% csrf_token %}
+        <div class="w-50 my-2" >
+            <input type="hidden" name="forumId" value="{{forum.id}}" >
+            <input class="form-control " type="text" name="title" placeholder ="Title">
+        </div>
+        <div class="w-50 my-2">
+            <textarea class="form-control " type="textarea" name="content"></textarea>
+        </div>
+        <div>
+            <button  class="btn btn-primary ">New Post</button>
+
+        </div>
+    </form>
+    {% for p in posts  %}
+    <div class="container py-3 border-1 border-black border my-2">
+        
+        <div>
+            <h3 class="text-decoration-underline " id="post{{p.post.id}}">
+                {{p.post.title}}
+
+            </h3>
+        </div>
+        <div>
+            <h5>{{p.post.content}}</h5>
+            
+        </div>
+        <div>
+            <p>{{p.post.author}} </p>
+            <span>{{p.post.uploadTime}}</span>
+        </div>
+        <div>
+            <button data-id="{{p.post.id}}" class="btn btn-primary viewReply"> View/Hide replies</button>
+        </div>
+        
+        
+        <div class="container d-none " id="repliesPost{{p.post.id}}">
+            <div class="my-3 p-3">
+                <form action="{% url 'newReply' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="forumId" value="{{forum.id}}" >
+
+                    <input type="hidden" name="postId" value = {{p.post.id}}>
+                    <textarea name="content" id="" class="form-control w-50"></textarea>
+                    <button class="btn btn-primary my-2 ">
+                        Reply
+                    </button>
+                </form>
+            </div>
+            {% for reply in p.replies %}
+                <div>
+                    <h5>
+                       {{forloop.counter}} {{reply.content}}
+                    </h5>
+                    <p>
+                        {{reply.author}}
+                    </p>
+                    <div>
+
+                        <span>{{reply.uploadTime}}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+            
+
+
+
+    </div>
+        
+    {% endfor %}
+
+</div>
+<script>
+const viewBtn = document.querySelectorAll(".viewReply");
+viewBtn.forEach(element => {
+    element.addEventListener("click", () => {
+        const replyDiv = document.getElementById("repliesPost" + element.dataset.id);
+        replyDiv.classList.toggle("d-none");
+        replyDiv.classList.toggle("d-block");
+    });
+});
+
+</script>
+{% endblock  %}

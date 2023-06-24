@@ -1,0 +1,75 @@
+{% extends 'instructor/base.html' %}
+{% block title %}
+  New Course
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+
+<h1>{{assignment.title | lower |title }}</h1>
+{% if data %}
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Student</th>
+        <th>Assignment</th>
+        <th>Submission</th>
+        <th>Assesment</th>   
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in data  %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{d.student}}</td>
+        <td> <a href="{{assignment.file.url}}"  class="badge rounded-pill text-bg-primary text-decoration-none p-3" download>Assignment  </td>
+
+        
+        </td>
+        {% if d.submission %}
+        <td> 
+          <a href="{{d.submission.file.url}}"  class="badge rounded-pill text-bg-primary text-decoration-none p-3" download>Submission 
+        </td>
+
+        {% if d.submission.assessment %}
+              <td>{{d.submission.assessment}}</td>
+        {% else %}
+        <td>
+      
+          <form action="/" method="post">
+           {% csrf_token %}
+           <input type="hidden" name="stdId" value="{{d.student.id}}">
+            <input type="text" name="assessment" required placeholder="Assesment"><br>
+            <button class="btn btn-primary mt-2"> Submit</button>
+          </form>
+        </td>
+        {% endif %}
+            
+            {% else %}
+            <td>
+              No submission
+
+            </td>
+
+            {% endif %}
+
+
+          <!-- link to view assignments view -->
+
+              
+        </td>
+      </tr>
+      {% endfor %}
+  
+    </tbody>
+
+</table>
+{% else %}
+THIS COURSE HAS NO ASSIGNMENTS AS OF NOW
+{% endif %}
+</div>
+{% endblock  %}

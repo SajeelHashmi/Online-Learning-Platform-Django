@@ -1,0 +1,86 @@
+{% extends 'instructor/base.html' %}
+{% block title %}
+  New Course
+{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="py-3">
+      {{course.title |title}}
+    </h1>
+    <h2 class="py-3">
+      Instructor: {{course.instructor.user.first_name | lower | capfirst}} {{course.instructor.user.last_name | lower | capfirst}}
+    </h2>
+    <h4 class="py-3">
+      <a href = "/forum/{{course.id}}" class="badge rounded-pill text-bg-primary text-decoration-none p-3"href="">Forum</a>
+    </h4>
+
+{% if assignments %}
+  
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Title</th>
+          <th>Assignment</th>
+          <th>Due Date</th>
+
+          
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in assignments  %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{a.title}}</td>
+          <td> <a href="{{a.file.url}}"  class="badge rounded-pill text-bg-primary text-decoration-none p-3" download>Assignment </td>
+
+          
+          </td>
+          <td>{{a.due_date}}</td>
+
+          <td>
+            <!-- link to view assignments view -->
+            <a href="/instructor/viewSubmissions/{{a.id}}">
+
+                <button class="btn-primary btn ">
+                    View Submissions {{a.id}}
+                </button>
+            </a>
+                
+          </td>
+        </tr>
+        {% endfor %}
+    
+      </tbody>
+
+  </table>
+  {% else %}
+  THIS COURSE HAS NO ASSIGNMENTS AS OF NOW
+{% endif %}
+</div>
+<div class="container py-5">
+    <h3>Create A New Assignment</h3>
+    <form action="{% url 'newAssignment' %}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="courseId" value = {{course.id}}>
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Title:</label>
+            <input  type="text" id="id_title" name="title" class="form-control" placeholder="Enter title" required>
+        </div>
+        <div class="mb-3">
+            <label for="id_due_date" class="form-label">Due Date:</label>
+            <input  type="date" id="id_due_date" name="dueDate" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="id_file" class="form-label">File:</label>
+            <input type="file" id="id_file" name="file" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+</div>
+
+
+{% endblock %}

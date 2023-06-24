@@ -1,0 +1,49 @@
+{% extends 'forum/base.html' %}
+{% block title %}
+  Notifications
+{% endblock %}
+{% block body %}
+<div class="container my-5">
+
+    
+<div class="row">
+    <div class="col">
+    </div> 
+       <div class="col-8">
+        {% for n in notifications %}
+            <div class="my-4">
+                {% if n.assignment %}   
+                 <a class="text-decoration-none text-bg-light " href="/student/course/{{n.course.id}}">
+     
+   
+
+                {% else %}
+                <a class="text-decoration-none text-bg-light " href="/forum/{{n.course.forum.id}}#post{{n.post.id}}">
+                    
+                    {% endif %}
+                    <h4 
+                    {% if n.read %}
+                        class = "text-dark">
+                    {% else %}
+                    class="text-primary ">
+                    {% endif %}
+                        
+                        {{n.content}}
+                    </h4>
+                </a>
+                <a href="/notifications/{{n.id}}">
+  
+                    <button data-id="{{n.id}}" class="btn btn-primary ">Mark as read</button>
+                </a>
+                
+            </div>
+        {% endfor %}
+    </div>  
+      <div class="col">
+    </div>
+</div>
+
+</div>
+
+
+{% endblock  %}
