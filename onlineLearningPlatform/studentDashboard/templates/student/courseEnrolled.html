@@ -84,7 +84,7 @@
       <form enctype="multipart/form-data" action="s" method="post" class="mt-4">
         {% csrf_token %}
         <div class="modal-body">
-        Only .pdf, .docx, , .xlsx and .ppt  files are accepted
+        Only .pdf, .docx, iles are accepted
         <input type="hidden" required name="courseId" value="{{course.id}}">
         <input type="hidden" required name="assignmentId" value = "{{a.a.id}}">
           <input type="file" required accept=".pdf, .docx, .xlsx .ppt" name="submission" id="">

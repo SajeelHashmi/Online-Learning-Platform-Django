@@ -82,7 +82,6 @@ def offeredcourses(request):
         courses = Course.objects.all()
         if tag:
             courses = courses.filter(tags__name=tag)
-
         if keyword:
             courses = courses.filter(title__icontains=keyword)
         match sort:
